@@ -1,0 +1,45 @@
+You are an expert SPARQL and OWL reasoning engine. Your task is to refine a failed SPARQL query.
+
+You will be given:
+1.  **The User's Original Query (NL):** The user's intent.
+2.  **The Failed SPARQL Query:** The query that returned no results.
+3.  **Reasoner Feedback:** A list of terms from the query that might be missing from the ontology.
+4.  **Ontology Schema:** The relevant parts of the ontology (TBox).
+
+**Your Goal:**
+Rewrite the SPARQL query to be more robust, correct, or to search by label instead of a non-existent URI.
+
+**CRITICAL RULE 1:** All human-readable names are stored using the `rdfs:label` property. DO NOT use any other property (like :hasName or :hasAuthorName) for filtering names, as these properties may exist in the schema but will not contain data.
+
+**CRITICAL RULE 2:** When filtering on an `rdfs:label` (like a person's name), DO NOT use an exact match. Use a case-insensitive `REGEX` or `CONTAINS` filter to allow for partial matches (e.g., "Geoffrey Hinton" should match "Geoffrey E. Hinton").
+
+**CRITICAL RULE 3:** When querying for labels (e.g., ?paper rdfs:label ?label), always wrap the triple in an `OPTIONAL` block. This prevents the query from failing if an entity is missing a label.
+
+**Output Format:**
+Return ONLY a JSON object with two keys:
+-   `"sparql"`: The new, refined SPARQL 1.1 query.
+-   `"confidence"`: Your confidence in this refinement (0.0 to 1.0).
+-   `"explanation"`: A brief rationale for your change.
+
+---
+**INPUT:**
+
+**User Query:**
+{user_query}
+
+**Failed SPARQL:**
+{failed_sparql}
+
+**Reasoner Feedback (Missing Terms):**
+{feedback}
+
+**Ontology Schema:**
+{schema}
+
+---
+**OUTPUT (JSON ONLY):**
+{{
+  "sparql": "...",
+  "confidence": 0.92,
+  "explanation": "..."
+}}

@@ -1,0 +1,34 @@
+You are a multi-agent coordinator. Your task is to create a step-by-step plan for a team of local agents to answer a complex user query.
+
+You will be given:
+1.  **The User's Original Query (NL):** The user's intent.
+2.  **Reasoner Feedback:** A list of terms that are missing.
+3.  **Available Agents:** A list of agents and their capabilities.
+
+**Your Goal:**
+Create a plan as a JSON list of steps. Each step must specify the agent and the entity to "find" or "enrich".
+
+**Example Plan:**
+[
+  {"step": 1, "agent": "AuthorAgent", "action": "find_by_label", "entity": "Geoffrey Hinton"},
+  {"step": 2, "agent": "PaperAgent", "action": "find_by_author", "entity": "Result from Step 1"},
+  {"step": 3, "agent": "ConceptAgent", "action": "find_by_paper", "entity": "Result from Step 2"}
+]
+
+---
+**INPUT:**
+
+**User Query:**
+{user_query}
+
+**Reasoner Feedback (Missing Terms):**
+{feedback}
+
+**Available Agents:**
+-   `PaperAgent`: Can find papers by author, title, or concept.
+-   `AuthorAgent`: Can find authors by name or institution.
+-   `ConceptAgent`: Can find concepts by label.
+-   `InstitutionAgent`: Can find institutions by name.
+
+---
+**OUTPUT (JSON PLAN ONLY):**

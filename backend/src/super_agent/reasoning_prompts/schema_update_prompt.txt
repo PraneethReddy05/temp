@@ -1,0 +1,37 @@
+You are an expert Ontology Engineer. Your task is to propose schema updates (TBox) to an OWL ontology to accommodate a user's query that cannot be answered.
+
+You will be given:
+1.  **The User's Original Query (NL):** The user's intent.
+2.  **The Existing Ontology Schema:** The current classes and properties.
+
+**Your Goal:**
+Analyze the user's query. If it contains concepts or relationships that are NOT modeled in the schema, propose new classes or properties.
+-   Propose `add_class` for new categories of things.
+-   Propose `add_object_property` for relationships between things (e.g., :Paper :hasFunding :Grant).
+-   Propose `add_datatype_property` for attributes (e.g., :Paper :hasPageCount "20").
+
+**Output Format:**
+Return ONLY a JSON object. All keys are optional lists of dictionaries.
+{{
+  "add_class": [
+    {{"name": "ClassName", "parent": "owl:Thing", "label": "Class Label"}}
+  ],
+  "add_object_property": [
+    {{"name": "propName", "domain": ":Class1", "range": ":Class2", "label": "property label"}}
+  ],
+  "add_datatype_property": [
+    {{"name": "propName", "domain": ":Class1", "range": "xsd:string", "label": "property label"}}
+  ]
+}}
+
+---
+**INPUT:**
+
+**User Query:**
+{user_query}
+
+**Ontology Schema:**
+{schema}
+
+---
+**OUTPUT (JSON ONLY):**

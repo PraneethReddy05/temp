@@ -1,0 +1,23 @@
+@prefix : <http://example.org/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# --- Individuals ---
+
+:Andrew_Ng rdf:type :Author ;
+    rdfs:label "Andrew Ng" .
+
+:Paper_DL_2020 rdf:type :Paper ;
+    :hasAuthor :Andrew_Ng ;
+    rdfs:label "Deep Learning Advancements 2020" .
+
+:Paper_AI_2018 rdf:type :Paper ;
+    :hasAuthor :Andrew_Ng ;
+    rdfs:label "AI in Practice 2018" .
+
+:Other_Author rdf:type :Author ;
+    rdfs:label "Other Author" .
+
+:Another_Paper rdf:type :Paper ;
+    :hasAuthor :Other_Author ;
+    rdfs:label "A Different Paper" .
