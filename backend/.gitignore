@@ -1,2 +1,4 @@
 config/settings.yaml
 .pyc
+__pycache__/
+env/
