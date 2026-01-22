@@ -1,4 +1,8 @@
 config/settings.yaml
-.pyc
-__pycache__/
 env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo 
+*.pyd 

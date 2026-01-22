@@ -27,17 +27,35 @@ class StringHandler(logging.Handler):
         return self.log_capture_string.getvalue().split('\n')
 
 def main():
-    st.set_page_config(layout="wide", page_title="Ontology-Driven Knowledge Graph")
+    # st.set_page_config(layout="wide", page_title="Ontology-Driven Knowledge Graph")
     
+    
+    # # Initialize Logger
+    # if 'log_handler' not in st.session_state:
+    #     handler = StringHandler()
+    #     formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
+    #     handler.setFormatter(formatter)
+    #     logging.getLogger().addHandler(handler)
+    #     st.session_state.log_handler = handler
+    
+    st.set_page_config(layout="wide", page_title="Ontology-Driven Knowledge Graph")
     st.title("🧠 Ontology-Driven Knowledge System")
     
-    # Initialize Logger
+    # --- LOGGING REPAIR ---
+    # We want to keep the terminal logs while CAPTURING them for the UI
     if 'log_handler' not in st.session_state:
-        handler = StringHandler()
-        formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
-        handler.setFormatter(formatter)
-        logging.getLogger().addHandler(handler)
-        st.session_state.log_handler = handler
+        # Import setup_logging from utils to ensure terminal is active
+        from src.utils import setup_logging
+        setup_logging("INFO") # This turns the terminal back ON
+        
+        # Now add the special UI capture handler
+        ui_handler = StringHandler()
+        ui_formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
+        ui_handler.setFormatter(ui_formatter)
+        
+        logging.getLogger().addHandler(ui_handler)
+        st.session_state.log_handler = ui_handler
+    # ----------------------
     
     # Initialize Controller
     if 'controller' not in st.session_state:
@@ -155,8 +173,8 @@ def main():
             render_graph(ui_result["graph"])
             render_explanation(ui_result)
             
-        with col2:
-            render_logs(ui_result["logs"])
+        # with col2:
+            # render_logs(ui_result["logs"])
 
 if __name__ == "__main__":
     main()

@@ -19,24 +19,51 @@ def load_config(config_path: str = "config/settings.yaml") -> Dict[str, Any]:
         logging.error(f"Error parsing config file: {e}")
         sys.exit(1)
 
+# def setup_logging(level: str = "INFO") -> None:
+#     """
+#     Configure global logging settings.
+#     """
+#     numeric_level = getattr(logging, level.upper(), None)
+#     if not isinstance(numeric_level, int):
+#         print(f"Invalid log level: {level}. Defaulting to INFO.")
+#         numeric_level = logging.INFO
+
+#     logging.basicConfig(
+#         level=numeric_level,
+#         format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s',
+#         datefmt='%Y-%m-%d %H:%M:%S',
+#         handlers=[
+#             logging.StreamHandler(sys.stdout)
+#             # You can add FileHandler here if needed
+#         ]
+    # )
+
 def setup_logging(level: str = "INFO") -> None:
     """
-    Configure global logging settings.
+    Configure global logging to show in BOTH terminal and code handlers.
     """
-    numeric_level = getattr(logging, level.upper(), None)
-    if not isinstance(numeric_level, int):
-        print(f"Invalid log level: {level}. Defaulting to INFO.")
-        numeric_level = logging.INFO
+    numeric_level = getattr(logging, level.upper(), logging.INFO)
+    
+    # Create the root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(numeric_level)
 
-    logging.basicConfig(
-        level=numeric_level,
-        format='%(asctime)s - [%(levelname)s] - %(name)s - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S',
-        handlers=[
-            logging.StreamHandler(sys.stdout)
-            # You can add FileHandler here if needed
-        ]
-    )
+    # Clear any existing handlers to prevent duplicate logs
+    if root_logger.hasHandlers():
+        root_logger.handlers.clear()
+
+    # 1. CREATE TERMINAL HANDLER (Standard Output)
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setLevel(numeric_level)
+    
+    # Create a nice format for the terminal
+    formatter = logging.Formatter('%(asctime)s - [%(levelname)s] - %(name)s - %(message)s')
+    console_handler.setFormatter(formatter)
+    
+    # Add it to the root logger
+    root_logger.addHandler(console_handler)
+    
+    logging.info(f"Logging initialized at {level} level. Terminal output active.")
 
 # --- NEW CACHING DECORATOR ---
 # This provides a simple, in-memory cache for our queries.
